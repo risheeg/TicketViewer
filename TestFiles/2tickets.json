@@ -1,0 +1,22 @@
+{
+    "tickets": [
+      {
+        "requester_id": 1000,
+        "assignee_id": 1,
+        "subject": "New Ticket 1",
+        "description": "New Ticket 1 Deec",
+        "tags": [
+          "est"
+        ]
+      },
+      {
+        "requester_id": 1001,
+        "assignee_id": 1,
+        "subject": "New Ticket 2",
+        "description": "New Ticket 2 Deec",
+        "tags": [
+          "est"
+        ]
+      }
+    ]
+}
