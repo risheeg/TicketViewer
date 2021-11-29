@@ -4,10 +4,12 @@ import display
 
 PAGE_SIZE = 25
 
-#Retrieves the inital page of tickets, and then calls on display function to display retrieved tickets,
-#finally calls upon show menu to allow user to naviagate to remaining ticket pages
 def getInitalPage():
-    requestURL = credentials.URL + '/api/v2/tickets' + '?page[size]=' + str(PAGE_SIZE) +'&sort=updated_at'
+    '''
+    Retrieves the inital page of tickets, and then calls on display function to display retrieved tickets,
+    finally calls upon show menu to allow user to naviagate to remaining ticket pages
+    '''
+    requestURL = credentials.URL + '/api/v2/tickets' + '?page[size]=' + str(PAGE_SIZE) + '&sort=updated_at'
     ticketPage = requests.get(requestURL, auth = myAuth)
     if (ticketPage.ok):
         display.displayTicketList(ticketPage.json()['tickets'])
@@ -16,9 +18,12 @@ def getInitalPage():
         print("There was an error loading the initial page")
         handleError(ticketPage)    
 
-#generates and displays contextual menu based on exsisitance of next and prev page
-#to get user input on going to next/prev page
+
 def showMenu (hasPrev, hasNext, currTicketPage):
+    '''
+    generates and displays contextual menu based on exsisitance of next and prev page
+    to get user input on going to next/prev page
+    '''
     print("Please type the following menu options and enter to interact with the Ticket Viewer")
     nextOptionText = "1. Next " + str(PAGE_SIZE) + " tickets \n"
     prevOptionText = "-1. Previous " + str(PAGE_SIZE) + " tickets\n"
@@ -46,8 +51,10 @@ def showMenu (hasPrev, hasNext, currTicketPage):
     else:
         navigateToPage(currTicketPage, choice)
 
-#Takes in parameter of increment or decrement page and then displays the new page with a relevent menu    
 def navigateToPage(ticketPage, incOrDec):
+    '''
+    Takes in parameter of increment or decrement page and then displays the new page with a relevent menu
+    '''
     if incOrDec == "-1":
         pageOption = 'prev'
         hasNext = True
@@ -67,16 +74,21 @@ def navigateToPage(ticketPage, incOrDec):
         print("There was an issue getting the desired page")
         handleError(newTicketPage)    
 
-#return true, if the requestURL page contains a non-empty list of tickets
 def checkPage(requestURL):
+    '''
+    return true, if the requestURL page contains a non-empty list of tickets
+    '''
     ticketPage = requests.get(requestURL, auth = myAuth)
     if(ticketPage.ok):
         return (len(ticketPage.json()['tickets']) != 0)
     else:
         print("An error was encountered trying to determine if the surrounding pages were valid")
         handleError(ticketPage)    
-#Gets and displays desired ticket number from user
+
 def getTicketByID():
+    '''
+    Gets and displays desired ticket number from user
+    '''
     ticket_id = input("Please enter your Ticket Id or press 0 to exit:\n")
     if (ticket_id == 0):
         return
@@ -87,8 +99,11 @@ def getTicketByID():
     else:
         handleError(ticketDetails)
         return getTicketByID()
-#Prints corresponding error message to error status code
+
 def handleError(requestData):
+    '''
+    Prints corresponding error message to error status code
+    '''
     if (requestData.status_code == 400):
         print("The request could not be understood. Try inputting it in differently")
     elif (requestData.status_code == 404):
