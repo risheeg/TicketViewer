@@ -7,7 +7,7 @@ PAGE_SIZE = 25
 #Retrieves the inital page of tickets, and then calls on display function to display retrieved tickets,
 #finally calls upon show menu to allow user to naviagate to remaining ticket pages
 def getInitalPage():
-    requestURL = credentials.URL + '/api/v2/tickets' + '?page[size]=' + str(PAGE_SIZE)
+    requestURL = credentials.URL + '/api/v2/tickets' + '?page[size]=' + str(PAGE_SIZE) +'&sort=updated_at'
     ticketPage = requests.get(requestURL, auth = myAuth)
     if (ticketPage.ok):
         display.displayTicketList(ticketPage.json()['tickets'])
@@ -24,7 +24,7 @@ def showMenu (hasPrev, hasNext, currTicketPage):
     prevOptionText = "-1. Previous " + str(PAGE_SIZE) + " tickets\n"
     exitOptionText = "0. Exit \n"
     viewOptionText = "2. View a speific ticket \n"
-
+    print(exitOptionText)
     validInputs ={"0", "2"}
     if hasNext: #builds menu
         validInputs.add("1")
@@ -33,7 +33,7 @@ def showMenu (hasPrev, hasNext, currTicketPage):
         validInputs.add("-1")
         print(prevOptionText)
     print(viewOptionText)    
-    print(exitOptionText)
+    
     choice = input()
     if choice not in validInputs: 
         print("Invalid Input")
@@ -77,7 +77,7 @@ def checkPage(requestURL):
         handleError(ticketPage)    
 #Gets and displays desired ticket number from user
 def getTicketByID():
-    ticket_id = input("Please enter your Ticket Id or press 0 to exit:")
+    ticket_id = input("Please enter your Ticket Id or press 0 to exit:\n")
     if (ticket_id == 0):
         return
     requestURL = credentials.URL + "/api/v2/tickets/" + ticket_id
@@ -97,6 +97,8 @@ def handleError(requestData):
         print("The service is down. Try again later")   
     elif (requestData.status_code == 429):
         print("Too many reuests, try after a while")
+    elif (requestData.status_code == 401):
+        print("There was an error with your credentials. Make sure you've inputted in your details in credentials.py")    
     else:
         print("An unidentified error occured. Let us know!")            
   
