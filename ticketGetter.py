@@ -38,7 +38,6 @@ def showMenu (hasPrev, hasNext, currTicketPage):
         validInputs.add("-1")
         print(prevOptionText)
     print(viewOptionText)    
-    
     choice = input()
     if choice not in validInputs: 
         print("Invalid Input")
